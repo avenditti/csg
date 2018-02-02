@@ -1,0 +1,158 @@
+
+<!-- saved from url=(0083)http://mypages.valdosta.edu/rpmihail/teaching/S18/CS4830/assignments/bresenham.html -->
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+<canvas id="canvas" width="500" height="500" style="border: 1px solid black"></canvas>
+
+<script>
+/*
+Hello Alex Venditti!
+You selected class: CS4830, section: A 
+You are submitting program 2 Code
+Success
+Your file: bresenham.html, has been successfully submitted!
+
+Alex, thank you!
+Your submission was logged, your submission number is: 1985464835. Keep it for your records!
+*/
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+
+canvas.addEventListener("mousedown", handleMouseDown);
+canvas.addEventListener("mousemove", handleMouseMove);
+canvas.addEventListener("mouseup", handleMouseUp);
+
+  
+var p0 = {x: 0, y:0};
+var p1 = {x: 0, y:0};
+
+ 
+var isdown = 0;
+
+ 
+display();
+
+
+function setPixel(x, y) {
+	context.fillRect(x, y, 1, 1);
+}
+  
+
+function handleMouseUp(event)
+{
+	isdown = 0;
+	p1.x = event.clientX - canvas.offsetLeft;
+	p1.y = event.clientY - canvas.offsetTop;
+	display();
+}
+
+  
+
+function handleMouseDown(event)
+{
+	isdown = 1;
+	p0.x = event.clientX - canvas.offsetLeft;
+	p0.y = event.clientY - canvas.offsetTop;
+	display();
+
+}
+
+  
+
+function handleMouseMove(event)
+
+{
+	if (isdown == 0)
+		return;
+	
+  	p1.x = event.clientX - canvas.offsetLeft;
+	p1.y = event.clientY - canvas.offsetTop;
+
+	display();
+}
+
+
+
+function bresenham(p0, p1) {
+	var x0 = p0.x;
+	var x1 = p1.x;
+	var y0 = p0.y;
+	var y1 = p1.y;
+	var ystep = y1 > y0 ? 1 : -1;
+	var xstep = x1 > x0 ? 1 : -1;
+	var dx = x1 - x0;
+	var dy = y1 - y0;
+	var D = 2 * dy - dx;
+	var x = x0;
+	var y = y0;
+	if(!(Math.abs(dy) > Math.abs(dx))) {
+		for (x = x0; x < x1; x++) {
+			setPixel(x,y);
+			if (D > 0) {
+				y = y + ystep;
+				D = D - (2 * dx);
+			}
+			D = D + (2 * dy * ystep);
+		}
+		for (x = x0; x > x1; x--) {
+			setPixel(x,y);
+			if (D > 0) {
+				y = y + ystep;
+				D = D - (2 * dx * xstep);
+			}
+			D = D + (2 * dy * ystep);
+		}
+	} else { 	
+		for (y = y0; y < y1; y++) {
+			setPixel(x,y);
+			if (D > 0) {
+				x = x + xstep;
+				D = D - (2 * dy);
+			}
+			D = D + (2 * dx * xstep);
+		}
+		for (y = y0; y > y1; y--) {
+			setPixel(x,y);
+			if (D > 0) {
+				x= x + xstep;
+				D = D - (2 * dy * ystep);
+			}
+			D = D + (2 * dx * xstep);
+		}
+	}
+}
+
+
+function display()
+{
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	var dx = p1.x - p0.x;
+	var dy = p1.y - p0.y;
+
+	context.fillStyle = "#000000";
+	context.strokeStyle = "#000000";
+	
+	bresenham(p0, p1);
+
+	// this is what your algorithm SHOULD output, comment these when working on the algorithm
+	// context.beginPath();
+	// context.moveTo(p0.x, p0.y);
+	// context.lineTo(p1.x, p1.y);
+	// context.stroke();
+
+}
+
+  
+
+</script>
+
+<p id="quadrant"></p>
+
+
+
+
+</body></html>
